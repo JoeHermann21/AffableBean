@@ -3,16 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package sessao;
 
-import entidades.ProdutoSolicitado;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import model.ProdutoSolicitado;
 
 /**
  *
- * @author e.andre.germano
+ * @author andre
  */
 @Stateless
 public class ProdutoSolicitadoFacade extends AbstractFacade<ProdutoSolicitado> {
