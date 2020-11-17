@@ -1,50 +1,35 @@
-<%-- 
-    Document   : index
-    Created on : 01/07/2019, 19:08:09
-    Author     : andre
---%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
+<%--
 
-<html>   
-    <body>
-        <div id="main">
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
+
+        <sql:query var="categorias" dataSource="jdbc/affablebean">
+            SELECT * FROM categoria
+        </sql:query> --%>
 
 
             <div id="indexLeftColumn">
                 <div id="welcomeText">
-                    <p>[ welcome text ]</p>
+                    <p style="font-size: larger">Bem-vindo à loja virtual Affable Bean</p>
+
+                    <p>Navegue e aprenda mais sobre nosso serviço único de entrega,
+						onde trazemos a você produtos orgânicos e frescos para o
+						dia-a-dia, com variedades em carnes, frutas, legumes, pães,
+						entre outras delícias</p>
                 </div>
             </div>
-
+               
             <div id="indexRightColumn">
-                <!--  <div class="categoryBox">
-                      <a href="#">
-                          <span class="categoryLabelText">dairy</span>
-                      </a>
-                  </div> -->
-                <c:forEach var="categoria" items="${categories}">
+                <c:forEach var="categoria" items="${categorias}">
+                    <div class="categoryBox">
+                        <a href="categoria?${categoria.id}">
+							<span class="categoryLabel"></span>
+                            <span class="categoryLabelText">${categoria.nome}</span>
+
+                            <img src="${initParam.categoriaImagePath}${categoria.nome}.jpg"
+                                 alt="${categoria.nome}" class="categoryImage">
+                        </a>
+                    </div>
                 </c:forEach>
-                <div class="categoryBox">
-                    <a href="#">
-                        <span class="categoryLabelText">meats</span>
-                    </a>
-                </div>
-                <div class="categoryBox">
-                    <a href="#">
-                        <span class="categoryLabelText">bakery</span>
-                    </a>
-                </div>
-                <div class="categoryBox">
-                    <a href="#">
-                        <span class="categoryLabelText">fruit & veg</span>
-                    </a>
-                </div>
-
             </div>
-
-        </div>
-    </body>
-</html>

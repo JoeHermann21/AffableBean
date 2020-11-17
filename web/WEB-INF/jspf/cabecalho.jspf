@@ -1,0 +1,73 @@
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <link rel="stylesheet" type="text/css" href="css/affablebean.css">
+        <title>The Affable Bean</title>
+    </head>
+    <body>
+        <div id="main">
+            <div id="header">
+                <div id="widgetBar">
+
+                    <div class="headerWidget">
+                        <c:if test="${!empty carrinho && carrinho.numeroDeItens != 0 && 
+                                      !fn:contains(pageContext.request.servletPath,'/checkout') &&
+                                      requestScope['javax.servlet.forward.servlet_path'] ne '/checkout' &&
+                                      !fn:contains(pageContext.request.servletPath,'/carrinho') &&
+                                      requestScope['javax.servlet.forward.servlet_path'] ne '/carrinho'}">
+
+                      <a href="checkout" class="bubble">
+                        seguir para o checkout &#x279f;
+                      </a>
+                    </c:if>
+                    </div>
+
+                    <div class="headerWidget" id="viewCarrinho">
+
+                    <img src="img/carrinho.gif" alt="shopping cart icon" id="carrinho">
+
+                    <span class="horizontalMargin">
+                      <c:choose>
+                        <c:when test="${carrinho.numeroDeItens == null}">
+                          0
+                        </c:when>
+                        <c:otherwise>
+                          ${carrinho.numeroDeItens}
+                        </c:otherwise>
+                      </c:choose>
+
+                      <c:choose>
+                        <c:when test="${carrinho.numeroDeItens == 1}">
+                          item
+                        </c:when>
+                        <c:otherwise>
+                          itens
+                        </c:otherwise>
+                      </c:choose>
+                    </span>
+
+                    <c:if test="${!empty carrinho && carrinho.numeroDeItens != 0 &&
+
+                                  !fn:contains(pageContext.request.servletPath,'/carrinho') &&
+                                  requestScope['javax.servlet.forward.servlet_path'] ne '/carrinho'}">
+
+                      <a href="viewCarrinho" class="bubble">
+                          visualizar carrinho
+                      </a>
+                    </c:if>
+                </div>
+                </div>
+
+                <a href="index.jsp">
+                    <img src="img/logo.png" id="logo" alt="Affable Bean logo">
+                </a>
+
+                <img src="img/logoText.png" id="logoText" alt="the affable bean">
+            </div>

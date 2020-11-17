@@ -1,132 +1,102 @@
-<%-- 
-    Document   : carrinho
-    Created on : 03/07/2019, 12:14:11
-    Author     : e.andre.germano
---%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<div id="singleColumn">
 
-<html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <link rel="stylesheet" type="text/css" href="css/affablebean.css">
-        <title>The Affable Bean</title>
-    </head>
-    <body>
-        <div id="main">
-            <div id="header">
-                <div id="widgetBar">
+    <c:choose>
+        <c:when test="${carrinho.numeroDeItens > 1}">
+            <p>Seu carrinho de compras contém ${carrinho.numeroDeItens} itens.</p>
+        </c:when>
+        <c:when test="${carrinho.numeroDeItens == 1}">
+            <p>Seu carrinho de compras contém ${carrinho.numeroDeItens} item.</p>
+        </c:when>
+        <c:otherwise>
+            <p>Seu carrinho de compras está vazio.</p>
+        </c:otherwise>
+    </c:choose>
 
-                    <div class="headerWidget">
-                        [ language toggle ]
-                    </div>
+        <div id="actionBar">
+        <c:if test="${!empty carrinho && carrinho.numeroDeItens != 0}">
+		
+			<c:url var="url" value="viewCarrinho">
+                <c:param name="limpar" value="true"/>
+            </c:url>
+			
+            <a href="viewCarrinho?limpar=true" class="bubble hMargin">Limpar carrinho</a>
+        </c:if>
 
-                    <div class="headerWidget"></div>
+                 
+        <c:set var="value">
+            <c:choose>
+                
+                <c:when test="${!empty selectedCategoria}">
+                    categoria
+                </c:when>
 
-                    <div class="headerWidget">
-                        [ shopping cart widget ]
-                    </div>
+                <c:otherwise>
+                    index.jsp
+                </c:otherwise>
+            </c:choose>
+        </c:set>
 
-                </div>
+		<c:url var="url" value="${value}"/>
+        <a href="${value}" class="bubble hMargin">continue comprando</a>
 
-                <a href="#">
-                    <img src="#" id="logo" alt="Affable Bean logo">
-                </a>
-
-                <img src="#" id="logoText" alt="the affable bean">
-            </div>
-
-            <div id="centerColumn">
-
-                <p>Your shopping cart contains x items.</p>
-
-                <div id="actionBar">
-                    <a href="#" class="bubble hMargin">clear cart</a>
-                    <a href="#" class="bubble hMargin">continue shopping</a>
-                    <a href="#" class="bubble hMargin">proceed to checkout</a>
-                </div>
-
-                <h4 id="subtotal">[ subtotal: xxx ]</h4>
-
-                <table id="cartTable">
-
-                    <tr class="header">
-                        <th>product</th>
-                        <th>name</th>
-                        <th>price</th>
-                        <th>quantity</th>
-                    </tr>
-
-                    <tr>
-                        <td class="lightBlue">
-                            <img src="#" alt="product image">
-                        </td>
-                        <td class="lightBlue">[ product name ]</td>
-                        <td class="lightBlue">[ price ]</td>
-                        <td class="lightBlue">
-
-                            <form action="updateCart" method="post">
-                                <input type="text"
-                                       maxlength="2"
-                                       size="2"
-                                       value="1"
-                                       name="quantity">
-                                <input type="submit"
-                                       name="submit"
-                                       value="update button">
-                            </form>
-                        </td>
-                    </tr>
-
-                     <tr>
-                        <td class="white">
-                            <img src="#" alt="product image">
-                        </td>
-                        <td class="white">[ product name ]</td>
-                        <td class="white">[ price ]</td>
-                        <td class="white">
-
-                            <form action="updateCart" method="post">
-                                <input type="text"
-                                       maxlength="2"
-                                       size="2"
-                                       value="1"
-                                       name="quantity">
-                                <input type="submit"
-                                       name="submit"
-                                       value="update button">
-                            </form>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td class="lightBlue">
-                            <img src="#" alt="product image">
-                        </td>
-                        <td class="lightBlue">[ product name ]</td>
-                        <td class="lightBlue">[ price ]</td>
-                        <td class="lightBlue">
-
-                            <form action="updateCart" method="post">
-                                <input type="text"
-                                       maxlength="2"
-                                       size="2"
-                                       value="1"
-                                       name="quantity">
-                                <input type="submit"
-                                       name="submit"
-                                       value="update button">
-                            </form>
-                        </td>
-                    </tr>
-
-                </table>
+        <c:if test="${!empty carrinho && carrinho.numeroDeItens != 0}">
+            <a href="checkout" class="bubble hMargin">concluir compra &#x279f;</a>
+        </c:if>
 
             </div>
 
-            <div id="footer">
-                <hr>
-                <p id="footerText">[ footer text ]</p>
-            </div>
-        </div>
-    </body>
-</html>
+        <c:if test="${!empty carrinho && carrinho.numeroDeItens != 0}">
+
+      <h4 id="subtotal">subtotal: R$ ${carrinho.subtotal}</h4>
+
+      <table id="cartTable">
+
+        <tr class="header">
+            <th>produto</th>
+            <th>nome</th>
+            <th>preço</th>
+            <th>quantidade</th>
+        </tr>
+
+        <c:forEach var="carinhoDeCompraItem" items="${carrinho.itens}" varStatus="iter">
+
+          <c:set var="produto" value="${carinhoDeCompraItem.produto}"/>
+
+          <tr class="${((iter.index % 2) == 0) ? 'lightBlue' : 'white'}">
+            <td>
+              <img src="${initParam.produtoImagePath}${produto.nome}.png"
+                   alt="${produto.nome}">
+            </td>
+
+            <td>${produto.nome}</td>
+
+            <td>
+                R$ ${carinhoDeCompraItem.total}
+                <br>
+                <span class="smallText">( R$ ${produto.preco} / unidade )</span>
+            </td>
+
+            <td>
+                <form action="atualizarCarrinho" method="post">
+                    <input type="hidden"
+                           name="produtoId"
+                           value="${produto.id}">
+                    <input type="text"
+                           maxlength="2"
+                           size="2"
+                           value="${carinhoDeCompraItem.quantidade}"
+                           name="quantidade"
+                           style="margin:5px">
+                    <input type="submit"
+                           name="submit"
+                           value="update">
+                </form>
+            </td>
+          </tr>
+
+        </c:forEach>
+
+      </table>
+
+    </c:if>
+</div>
