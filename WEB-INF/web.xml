@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <context-param>
+        <description>Caminho relativo para as imagens do produto</description>
+        <param-name>produtoImagePath</param-name>
+        <param-value>img/produtos/</param-value>
+    </context-param>
+    <context-param>
+        <description>Caminho relativo para as categorias do produto</description>
+        <param-name>categoriaImagePath</param-name>
+        <param-value>img/categorias/</param-value>
+    </context-param>
+    <context-param>
+        <description>O frete é aplicado em todos os pedidos</description>
+        <param-name>deliverySurcharge</param-name>
+        <param-value>3.00</param-value>
+    </context-param>
+    <session-config>
+        <session-timeout>10</session-timeout>
+    </session-config>
+    <!-- <resource-ref>
+        <description>Connects to database for AffableBean application</description>
+        <res-ref-name>jdbc/affablebean</res-ref-name>
+        <res-type>javax.sql.DataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref> -->
+    <jsp-config>
+        <jsp-property-group>
+            <description>Seleção de cabeçalho e rodapé</description>
+            <url-pattern>/index.jsp</url-pattern>
+            <url-pattern>/WEB-INF/view/*</url-pattern>
+            <include-prelude>/WEB-INF/jspf/cabecalho.jspf</include-prelude>
+            <include-coda>/WEB-INF/jspf/rodape.jspf</include-coda>
+        </jsp-property-group>
+    </jsp-config>
+    <!--    <context-param>
+        <param-name>produtoImagePath</param-name>
+        <param-value>img/produtos/</param-value>
+    </context-param>
+    <context-param>
+        <param-name>categoriaImagePath</param-name>
+        <param-value>img/categorias/</param-value>
+    </context-param>
+    <servlet>
+        <servlet-name>ControleServlet</servlet-name>
+        <servlet-class>controle.ControleServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ControleServlet</servlet-name>
+        <url-pattern>/categoria</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleServlet</servlet-name>
+        <url-pattern>/adicionarAoCarrinho</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleServlet</servlet-name>
+        <url-pattern>/viewCarrinho</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleServlet</servlet-name>
+        <url-pattern>/atualizarCarrinho</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleServlet</servlet-name>
+        <url-pattern>/checkout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleServlet</servlet-name>
+        <url-pattern>/compra</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ControleServlet</servlet-name>
+        <url-pattern>/selecionarIdioma</url-pattern>
+    </servlet-mapping>
+    <resource-ref>
+        <description>Conecta o banco de dados na aplicação AffableBean</description>
+        <res-ref-name>jdbc/affablebean</res-ref-name>
+        <res-type>javax.sql.ConnectionPoolDataSource</res-type>
+        <res-auth>Container</res-auth>
+        <res-sharing-scope>Shareable</res-sharing-scope>
+    </resource-ref>-->
+</web-app>
