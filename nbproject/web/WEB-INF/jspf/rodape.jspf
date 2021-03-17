@@ -1,0 +1,15 @@
+<%@page contentType="text/html" pageEncoding="UTF-8"%>
+
+<div id="footer">
+    <br>
+    <hr id="footerDivider">
+    <p id="footerText" class="reallySmallText">
+        <a href="<c:url value='#'/>"><fmt:message key="privacidade" /></a>
+                    &nbsp;&nbsp;::&nbsp;&nbsp;
+                    <a href="<c:url value='#'/>"><fmt:message key="contato" /></a>
+                    &nbsp;&nbsp;&copy;&nbsp;&nbsp;
+        2020 affable bean</p>
+</div>
+</body>
+</body>
+</html>
