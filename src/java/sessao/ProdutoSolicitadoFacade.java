@@ -6,6 +6,7 @@
 
 package sessao;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,13 +21,16 @@ public class ProdutoSolicitadoFacade extends AbstractFacade<ProdutoSolicitado> {
     @PersistenceContext(unitName = "AffableBeanPU")
     private EntityManager em;
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
     public ProdutoSolicitadoFacade() {
         super(ProdutoSolicitado.class);
+    }
+	
+	public List<ProdutoSolicitado> findByPedidoId(Object id) {
+        return em.createNamedQuery("ProdutoSolicitado.findByPedidoId").setParameter("pedidoId", id).getResultList();
     }
     
 }

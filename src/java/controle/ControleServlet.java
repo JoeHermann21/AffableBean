@@ -9,6 +9,8 @@ import carrinho.CarrinhoDeCompra;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.Locale;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,13 +22,15 @@ import javax.servlet.http.HttpSession;
 import model.Categoria;
 import model.Produto;
 import sessao.CategoriaFacade;
+import sessao.PedidoManager;
 import sessao.ProdutoFacade;
+import validate.Validator;
 
 /**
  *
  * @author andre
  */
-@WebServlet(name = "ControleServlet",
+@WebServlet(name = "Controle",
         loadOnStartup = 1,
         urlPatterns = {"/categoria",
             "/adicionarAoCarrinho",
@@ -43,6 +47,8 @@ public class ControleServlet extends HttpServlet {
     private CategoriaFacade categoriaFacade;
     @EJB
     private ProdutoFacade produtoFacade;
+    @EJB
+    private PedidoManager pedidoManager;
 
     @Override
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -105,11 +111,29 @@ public class ControleServlet extends HttpServlet {
             carrinho.calcularTotal(surcharge);
 
         } else if (userPath.equals("/selecionarIdioma")) {
-            // TODO: Implement language request
+
+            String idioma = request.getParameter("idioma");
+
+            request.setAttribute("idioma", idioma);
+
+            String usuarioView = (String) session.getAttribute("view");
+
+            if ((usuarioView != null)
+                    && (!usuarioView.equals("/index"))) {
+
+                userPath = usuarioView;
+            } else {
+
+                try {
+                    request.getRequestDispatcher("/index.jsp").forward(request, response);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                return;
+            }
 
         }
 
-        // use RequestDispatcher to forward request internally
         String url = "/WEB-INF/view" + userPath + ".jsp";
 
         try {
@@ -131,9 +155,12 @@ public class ControleServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        request.setCharacterEncoding("UTF-8");
+
         String userPath = request.getServletPath();
         HttpSession session = request.getSession();
         CarrinhoDeCompra carrinho = (CarrinhoDeCompra) session.getAttribute("carrinho");
+        Validator validator = new Validator();
 
         if (userPath.equals("/adicionarAoCarrinho")) {
 
@@ -159,18 +186,75 @@ public class ControleServlet extends HttpServlet {
             String produtoId = request.getParameter("produtoId");
             String quantidade = request.getParameter("quantidade");
 
-            Produto produto = produtoFacade.find(Integer.parseInt(produtoId));
-            carrinho.atualizar(produto, quantidade);
+            boolean invalidEntry = validator.validateQuantity(produtoId, quantidade);
+
+            if (!invalidEntry) {
+
+                Produto produto = produtoFacade.find(Integer.parseInt(produtoId));
+                carrinho.atualizar(produto, quantidade);
+
+            }
 
             userPath = "/carrinho";
 
         } else if (userPath.equals("/compra")) {
-            // TODO: Implement purchase action
+            if (carrinho != null) {
 
-            userPath = "/confirmacao";
+                String nome = request.getParameter("nome");
+                String email = request.getParameter("email");
+                String telefone = request.getParameter("telefone");
+                String endereco = request.getParameter("endereco");
+                String cidade = request.getParameter("cidade");
+                String numCartaoCredito = request.getParameter("numCartaoCredito");
+
+                boolean validationErrorFlag = false;
+                validationErrorFlag = validator.validateForm(nome, email, telefone, endereco, cidade, numCartaoCredito, request);
+
+                if (validationErrorFlag == true) {
+                    request.setAttribute("validationErrorFlag", validationErrorFlag);
+                    userPath = "/checkout";
+
+                } else {
+
+                    int pedidoId = pedidoManager.placePedido(nome, email, telefone, endereco, cidade, numCartaoCredito, carrinho);
+
+                    if (pedidoId != 0) {
+
+                        Locale locale = (Locale) session.getAttribute("javax.servlet.jsp.jstl.fmt.locale.session");
+                        String idioma = "";
+
+                        if (locale != null) {
+
+                            idioma = (String) locale.getLanguage();
+                        }
+
+                        carrinho = null;
+
+                        session.invalidate();
+
+                        if (!idioma.isEmpty()) {
+
+                            request.setAttribute("idioma", idioma);
+                        }
+
+                        Map orderMap = pedidoManager.getDetalhesPedido(pedidoId);
+
+                        request.setAttribute("cliente", orderMap.get("cliente"));
+                        request.setAttribute("produtos", orderMap.get("produtos"));
+                        request.setAttribute("gravarPedido", orderMap.get("gravarPedido"));
+                        request.setAttribute("produtosSolicitados", orderMap.get("produtosSolicitados"));
+
+                        userPath = "/confirmacao";
+
+                    } else {
+                        userPath = "/checkout";
+                        request.setAttribute("orderFailureFlag", true);
+                    }
+                }
+
+            }
         }
 
-        // use RequestDispatcher to forward request internally
         String url = "/WEB-INF/view" + userPath + ".jsp";
 
         try {

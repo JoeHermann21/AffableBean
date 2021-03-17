@@ -6,6 +6,7 @@
 
 package sessao;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -20,7 +21,6 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
     @PersistenceContext(unitName = "AffableBeanPU")
     private EntityManager em;
 
-    @Override
     protected EntityManager getEntityManager() {
         return em;
     }
@@ -29,4 +29,13 @@ public class PedidoFacade extends AbstractFacade<Pedido> {
         super(Pedido.class);
     }
     
+	public Pedido find(Object id) {
+        Pedido pedido = em.find(Pedido.class, id);
+        em.refresh(pedido);
+        return pedido;
+    }
+	@RolesAllowed("affableBeanAdmin")
+	public Pedido findbyCliente(Object cliente) {
+        return (Pedido) em.createNamedQuery("Pedido.findbyCliente").setParameter("cliente", cliente).getSingleResult();
+    }
 }
