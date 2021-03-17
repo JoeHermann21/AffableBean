@@ -6,39 +6,42 @@
 
 <div id="singleColumn">
 
-                <p id="confirmationText">
-        <strong>Seu pedido foi processado com sucesso e vai ser entregue dentro de 24 horas.</strong>
+    <p id="confirmationText">
+        <strong><fmt:message key="mensagemSucesso"/></strong>
         <br><br>
-        Aqui está o número de confirmação da compra:
-        <strong>${pedidoGravacao.confirmacaoNumero}</strong>
+        <fmt:message key="mensagemNumeroConfirmacao"/>
+        <strong>${pedidoGravar.confirmacaoNumero}</strong>
         <br>
-        Para mais informações <a href="#">entre em contato conosco</a>.
+        <fmt:message key="mensagemContato"/>
         <br><br>
-        Obrigado por comprar conosco!
+        <fmt:message key="mensagemObrigado"/>
     </p>
 
-               <div class="summaryColumn" >
+	<div class="summaryColumn" >
 
         <table id="orderSummaryTable" class="detailsTable">
             <tr class="header">
-                <th colspan="3">resumo da compra</th>
+                <th colspan="3"><fmt:message key="sumarioPedido"/></th>
             </tr>
 
             <tr class="tableHeading">
-                <td>produto</td>
-                <td>quantidade</td>
-                <td>preco</td>
+                <td><fmt:message key="produto"/></td>
+                <td><fmt:message key="quantidade"/></td>
+                <td><fmt:message key="preco"/></td>
             </tr>
 
             <c:forEach var="produtoSolicitado" items="${produtosSolicitados}" varStatus="iter">
 
                 <tr class="${((iter.index % 2) != 0) ? 'lightBlue' : 'white'}">
-                    <td>${produtos[iter.index].nome}</td>
+                    <td>
+						<fmt:message key="${produtos[iter.index].nome}"/>
+					</td>
                     <td class="quantityColumn">
                         ${produtoSolicitado.quantidade}
                     </td>
                     <td class="confirmationPriceColumn">
-                        &euro; ${produtos[iter.index].preco * produtoSolicitado.quantidade}
+					<fmt:formatNumber type="currency" currencySymbol="R$ "
+                        value="${produtos[iter.index].preco * produtoSolicitado.quantidade}"/>
                     </td>
                 </tr>
 
@@ -47,21 +50,29 @@
             <tr class="lightBlue"><td colspan="3" style="padding: 0 20px"><hr></td></tr>
 
             <tr class="lightBlue">
-                <td colspan="2" id="deliverySurchargeCellLeft"><strong>sobretaxa de entrega:</strong></td>
-                <td id="deliverySurchargeCellRight">R$; ${initParam.deliverySurcharge}</td>
+                <td colspan="2" id="deliverySurchargeCellLeft"><strong><fmt:message key="frete"/>:</strong></td>
+                <td id="deliverySurchargeCellRight">
+				<fmt:formatNumber type="currency"
+                                      currencySymbol="R$ "
+                                      value="${initParam.deliverySurcharge}"/></td>
             </tr>
 
             <tr class="lightBlue">
-                <td colspan="2" id="totalCellLeft"><strong>total:</strong></td>
-                <td id="totalCellRight">R$; ${orderRecord.valorTotal}</td>
+                <td colspan="2" id="totalCellLeft"><strong><fmt:message key="total"/>:</strong></td>
+                <td id="totalCellRight">
+				<fmt:formatNumber type="currency"
+                                      currencySymbol="R$ "
+                                      value="${pedidoGravar.total}"/></td>
             </tr>
 
             <tr class="lightBlue"><td colspan="3" style="padding: 0 20px"><hr></td></tr>
 
             <tr class="lightBlue">
-                <td colspan="3" id="dateProcessedRow"><strong>data de criação:</strong>
-                    ${orderRecord.dataCriacao}
-                </td>
+                <td colspan="3" id="dateProcessedRow"><strong><fmt:message key="dataProcessada"/>:</strong>
+                    <fmt:formatDate value="${pedidoGravar.dataCriacao}"
+                                    type="both"
+                                    dateStyle="short"
+                                    timeStyle="short"/></td>
             </tr>
         </table>
 
@@ -71,7 +82,7 @@
 
         <table id="deliveryAddressTable" class="detailsTable">
             <tr class="header">
-                <th colspan="3">endereco de entrega</th>
+                <th colspan="3"><fmt:message key="enderecoEntrega"/></th>
             </tr>
 
             <tr>
@@ -80,12 +91,12 @@
                     <br>
                     ${cliente.endereco}
                     <br>
-                    Região ${cliente.regiao}
+                    <fmt:message key="regiao"/> ${cliente.regiao}
                     <br>
                     <hr>
-                    <strong>email:</strong> ${cliente.email}
+                    <strong><fmt:message key="email"/>:</strong> ${cliente.email}
                     <br>
-                    <strong>telefone:</strong> ${cliente.telefone}
+                    <strong><fmt:message key="telefone"/>:</strong> ${cliente.telefone}
                 </td>
             </tr>
         </table>

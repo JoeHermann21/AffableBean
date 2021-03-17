@@ -1,18 +1,20 @@
+<%@page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<c:set var='view' value='/categoria' scope='session' />
 <div id="categoryLeftColumn">
     <c:forEach var="categoria" items="${categorias}">
         <c:choose>
-            <c:when test="${categoria.id == pageContext.request.queryString}">
+            <c:when test="${categoria.id == selectedCategoria.nome}">
                 <div class="categoryButton" id="selectedCategory">
                     <span class="categoryText">
-                        ${categoria.nome}
+						<fmt:message key="${categoria.nome}"/>                        
                     </span>
                 </div>
             </c:when>
             <c:otherwise>
-                <a href="categoria?${categoria.id}" class="categoryButton">
-                    <div class="categoryText">
-                        ${categoria.nome}
-                    </div>
+                <a href="<c:url value='categoria?${categoria.id}'/>" class="categoryButton">
+                    <span class="categoryText">
+						<fmt:message key="${categoria.nome}"/>
+                    </span>
                 </a>
             </c:otherwise>
         </c:choose>
@@ -20,7 +22,7 @@
 </div>
 
 <div id="categoryRightColumn">
-    <p id="categoryTitle">${selectedCategoria.nome}</p>
+    <p id="categoryTitle"><fmt:message key="${selectedCategoria.nome}" /></p>
 
     <table id="productTable">
         <c:forEach var="produto" items="${categoriaProdutos}" varStatus="iter">
@@ -31,20 +33,22 @@
                          alt="${produto.nome}">
                 </td>
                 <td>
-                    ${produto.nome}
+				<fmt:message key="${produto.nome}"/>
+                    
                     <br>
-                    <span class="smallText">${produto.descricao}</span>
+                    <span class="smallText"><fmt:message key='${produto.descricao}DescriÃ§Ã£o'/></span>
                 </td>
                 <td>
-                    &euro; ${produto.preco} / unit
+                    <fmt:formatNumber type="currency" currencySymbol="R$ " value="${produto.preco}"/>
                 </td>
                 <td>
-                    <form action="adicionarAoCarrinho" method="post">
+                    <form action="<c:url value='adicionarAoCarrinho'/>" method="post">
                         <input type="hidden"
                                name="produtoId"
                                value="${produto.id}">
                         <input type="submit"
-                               value="adicionar ao carrinho">
+								name="submit"
+                               value="<fmt:message key='adicionar ao carrinho'/>">
                     </form>
                 </td>
             </tr>

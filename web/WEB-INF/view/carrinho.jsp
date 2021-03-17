@@ -1,14 +1,15 @@
+<c:set var='view' value='/carrinho' scope='session' />
 <div id="singleColumn">
 
     <c:choose>
         <c:when test="${carrinho.numeroDeItens > 1}">
-            <p>Seu carrinho de compras contém ${carrinho.numeroDeItens} itens.</p>
+            <p><fmt:message key="seuCarrinhoContem"/> ${carrinho.numeroDeItens} <fmt:message key="itens"/>.</p>
         </c:when>
         <c:when test="${carrinho.numeroDeItens == 1}">
-            <p>Seu carrinho de compras contém ${carrinho.numeroDeItens} item.</p>
+            <p><fmt:message key="seuCarrinhoContem"/> ${carrinho.numeroDeItens} <fmt:message key="item"/>.</p>
         </c:when>
         <c:otherwise>
-            <p>Seu carrinho de compras está vazio.</p>
+            <p><fmt:message key="seuCarrinhoVazio"/></p>
         </c:otherwise>
     </c:choose>
 
@@ -19,7 +20,7 @@
                 <c:param name="limpar" value="true"/>
             </c:url>
 			
-            <a href="viewCarrinho?limpar=true" class="bubble hMargin">Limpar carrinho</a>
+            <a href="${url}" class="bubble hMargin"><fmt:message key="limparCarrinho"/></a>
         </c:if>
 
                  
@@ -37,25 +38,27 @@
         </c:set>
 
 		<c:url var="url" value="${value}"/>
-        <a href="${value}" class="bubble hMargin">continue comprando</a>
+        <a href="${value}" class="bubble hMargin"><fmt:message key="continueComprando"/></a>
 
         <c:if test="${!empty carrinho && carrinho.numeroDeItens != 0}">
-            <a href="checkout" class="bubble hMargin">concluir compra &#x279f;</a>
+            <a href="checkout" class="bubble hMargin"><fmt:message key="seguirParaOCheckout"/></a>
         </c:if>
 
             </div>
 
         <c:if test="${!empty carrinho && carrinho.numeroDeItens != 0}">
 
-      <h4 id="subtotal">subtotal: R$ ${carrinho.subtotal}</h4>
+      <h4 id="subtotal"><fmt:message key="subtotal"/>:
+	  <fmt:formatNumber type="currency" currencySymbol="R$ " value="${carrinho.subtotal}"/>
+	  </h4>
 
       <table id="cartTable">
 
         <tr class="header">
-            <th>produto</th>
-            <th>nome</th>
-            <th>preço</th>
-            <th>quantidade</th>
+			<th><fmt:message key="produto"/></th>
+            <th><fmt:message key="nome"/></th>
+            <th><fmt:message key="preco"/></th>
+            <th><fmt:message key="quantidade"/></th>
         </tr>
 
         <c:forEach var="carinhoDeCompraItem" items="${carrinho.itens}" varStatus="iter">
@@ -68,12 +71,17 @@
                    alt="${produto.nome}">
             </td>
 
-            <td>${produto.nome}</td>
+			<td><fmt:message key="${produto.nome}"/></td>
 
             <td>
-                R$ ${carinhoDeCompraItem.total}
+				<fmt:formatNumber type="currency" currencySymbol="R$ " value="${carinhoDeCompraItem.total}"/>
                 <br>
-                <span class="smallText">( R$ ${produto.preco} / unidade )</span>
+                <span class="smallText">(
+                    <fmt:formatNumber 
+					type="currency" 
+					currencySymbol="R$ " 
+					value="${produto.preco}"/>
+                    / <fmt:message key="unidade"/> )</span>
             </td>
 
             <td>

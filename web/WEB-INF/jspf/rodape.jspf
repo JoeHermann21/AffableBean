@@ -2,12 +2,12 @@
 
 <div id="footer">
     <br>
-    <hr>
+    <hr id="footerDivider">
     <p id="footerText" class="reallySmallText">
-        <a href="#">Política de Privacidade</a>
-        &nbsp;&nbsp;::&nbsp;&nbsp;
-        <a href="#">Contato</a>
-        &nbsp;&nbsp;&copy;&nbsp;&nbsp;
+        <a href="<c:url value='#'/>"><fmt:message key="privacidade" /></a>
+                    &nbsp;&nbsp;::&nbsp;&nbsp;
+                    <a href="<c:url value='#'/>"><fmt:message key="contato" /></a>
+                    &nbsp;&nbsp;&copy;&nbsp;&nbsp;
         2020 affable bean</p>
 </div>
 </body>
